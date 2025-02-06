@@ -109,30 +109,30 @@
         const wordCount = document.getElementById('wordCount');
         const notification = document.getElementById('notification');
 
-        // Function to count words
+        // Load saved text from localStorage
+        const savedText = localStorage.getItem('savedText');
+        if (savedText) {
+            editor.value = savedText;
+            updateWordCount(); // Update word count on load
+        }
+
         function countWords(text) {
             const words = text.trim().split(/\s+/);
             return words.filter(word => word.length > 0).length;
         }
 
-        // Load stored text from localStorage when the page loads
-        window.onload = () => {
-            const storedText = localStorage.getItem('editorText');
-            if (storedText) {
-                editor.value = storedText;
-                wordCount.textContent = `${countWords(storedText)} word${countWords(storedText) !== 1 ? 's' : ''}`;
-            }
-        };
-
-        // Update word count and save text to localStorage
-        editor.addEventListener('input', () => {
+        function updateWordCount() {
             const text = editor.value;
             const words = countWords(text);
             wordCount.textContent = `${words} word${words !== 1 ? 's' : ''}`;
-            localStorage.setItem('editorText', text); // Save text to localStorage
+        }
+
+        editor.addEventListener('input', () => {
+            updateWordCount();
+            // Save text to localStorage
+            localStorage.setItem('savedText', editor.value);
         });
 
-        // Copy text to clipboard
         function copyText() {
             navigator.clipboard.writeText(editor.value)
                 .then(() => {
