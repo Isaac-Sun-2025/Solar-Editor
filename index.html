@@ -133,10 +133,14 @@
                 });
         }
 
+        // Prevent textarea from forcing scroll to the bottom
         editor.addEventListener('input', function() {
+            const scrollPos = window.scrollY; // Save current scroll position
             this.style.height = 'auto';
             this.style.height = this.scrollHeight + 'px';
+            window.scrollTo(0, scrollPos); // Restore scroll position
         });
     </script>
+
 </body>
 </html>
